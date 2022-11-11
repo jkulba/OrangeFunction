@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.WebJobs;
 using ExecutionContext = Microsoft.Azure.WebJobs.ExecutionContext;
+using Newtonsoft.Json;
 
 namespace Orange.Tests
 {
@@ -21,7 +23,19 @@ namespace Orange.Tests
             var request = TestFactory.CreateHttpRequest("name", "Bill");
             var context = new ExecutionContext();
             var response = (OkObjectResult)await Ping.Run(request, context, logger);
-            Assert.Contains("Orange Alien Functions", response.Value);
+
+            PingResponse data = JsonConvert.DeserializeObject<PingResponse>(response.Value.ToString());
+
+            data.Application.Should().Contain("Orange Alien Functions");
         }
     }
+
+    public record PingResponse
+    {
+        public string InvocationId { get; init; }
+        public string Application { get; init; }
+        public string Message { get; init; }
+        public DateTimeOffset InvocationDate { get; init; }
+    }
+
 }
