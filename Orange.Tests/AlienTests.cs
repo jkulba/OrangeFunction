@@ -11,6 +11,8 @@ using Microsoft.Azure.WebJobs;
 using ExecutionContext = Microsoft.Azure.WebJobs.ExecutionContext;
 using Newtonsoft.Json;
 
+using Orange.Data;
+
 namespace Orange.Tests
 {
     public class AlienTests
@@ -24,18 +26,10 @@ namespace Orange.Tests
             var context = new ExecutionContext();
             var response = (OkObjectResult)await Ping.Run(request, context, logger);
 
-            PingResponse data = JsonConvert.DeserializeObject<PingResponse>(response.Value.ToString());
+            BasicResponse data = JsonConvert.DeserializeObject<BasicResponse>(response.Value.ToString());
 
             data.Application.Should().Contain("Orange Alien Functions");
         }
-    }
-
-    public record PingResponse
-    {
-        public string InvocationId { get; init; }
-        public string Application { get; init; }
-        public string Message { get; init; }
-        public DateTimeOffset InvocationDate { get; init; }
     }
 
 }

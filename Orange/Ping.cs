@@ -9,6 +9,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Orange.Data;
 
 namespace Orange
 {
@@ -27,7 +28,7 @@ namespace Orange
 
             await Task.Yield();
 
-            PingResponse pingResponse = new()
+            BasicResponse pingResponse = new()
             {
                 InvocationId = _invocationId,
                 Application = "Orange Alien Functions",
@@ -37,13 +38,5 @@ namespace Orange
 
             return (ActionResult)new OkObjectResult(JsonConvert.SerializeObject(pingResponse));
         }
-    }
-
-    public record PingResponse
-    {
-        public string InvocationId { get; init; }
-        public string Application { get; init; }
-        public string Message { get; init; }
-        public DateTimeOffset InvocationDate { get; init; }
     }
 }
