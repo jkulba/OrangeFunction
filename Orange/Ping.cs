@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace Orange
         [OpenApiOperation(operationId: "Ping", tags: new[] { "Ping" })]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Returns JSON response")]
         public static async Task<IActionResult> Run([
-            HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/ping")] HttpRequest req,
+            HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/ping")] HttpRequest request,
             ExecutionContext executionContext, ILogger log)
         {
             _invocationId = executionContext.InvocationId.ToString();
